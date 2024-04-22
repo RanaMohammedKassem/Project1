@@ -1,0 +1,279 @@
+import java.util.Scanner;
+
+class Product {
+    private int productId;
+    private String name;
+    private float price;
+
+    public Product(int productId, String name, float price) {
+        this.productId = Math.abs(productId);
+        this.name = name;
+        this.price = Math.abs(price);
+    }
+
+    // Setters and getters for productId, name, and price
+    public void setProductId(int productId){
+        this.productId=productId;
+    }
+    public void setName(String name){
+        this.name=name;
+    }
+    public void setPrice(float price){
+        this.price=price;
+    }
+    public int getProductId() {
+        return productId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+}
+
+class ElectronicProduct extends Product {
+    private String brand;
+    private int warrantyPeriod;
+
+    public ElectronicProduct(int productId, String name, float price, String brand, int warrantyPeriod) {
+        super(productId, name, price);
+        this.brand = brand;
+        this.warrantyPeriod = Math.abs(warrantyPeriod);
+    }
+
+    // Setters and getters for brand and warrantyPeriod
+    public void set_warrantyPeriod(int warrantyPeriod ){
+        this.warrantyPeriod=warrantyPeriod;
+    }
+    public void set_brand(String  brand ){
+        this.brand=brand ;
+    }
+    public int get_warrantyPeriod(){
+        return warrantyPeriod;
+    }
+    public String get_brand(){
+        return brand;
+    }
+}
+
+class ClothingProduct extends Product {
+    private String size;
+    private String fabric;
+
+    public ClothingProduct(int productId, String name, float price, String size, String fabric) {
+        super(productId, name, price);
+        this.size = size;
+        this.fabric = fabric;
+    }
+
+    // Setters and getters for size and fabric
+    public void set_size(String size){
+        this.size=size;
+    }
+    public void set_fabric(String fabric){
+        this.fabric =fabric;
+    }
+    public String get_size(){
+        return size;
+    }
+    public String get_fabric(){
+        return fabric ;
+    }
+}
+
+class BookProduct extends Product {
+    private String author;
+    private String publisher;
+
+    public BookProduct(int productId, String name, float price, String author, String publisher) {
+        super(productId, name, price);
+        this.author = author;
+        this.publisher = publisher;
+    }
+
+    // Setters and getters for author and publisher
+    public void set_author(String author){
+        this.author=author;
+    }
+    public void set_publisher(String publisher){
+        this.publisher=publisher;
+    }
+    public String get_author(){
+        return author;
+    }
+    public String get_publisher(){
+        return publisher;
+    }
+}
+//class customer
+class Customer {
+    private int customerId;
+    private String name;
+    private String address;
+
+    public Customer(int customerId, String name, String address) {
+        this.customerId = customerId;
+        this.name = name;
+        this.address = address;
+    }
+
+    // Setters and getters for customerId, name, and address
+    public void set_customerId(int customerId){
+        this.customerId=customerId;
+    }
+    public void set_name(String name){
+        this.name=name;
+}
+public void set_address(String address){
+    this.address=address;
+}
+public int get_customerId(){
+    return customerId;
+}
+public String get_name(){
+    return name;
+}
+public String get_address(){
+    return address;
+}
+}
+
+class Cart {
+    private int customerId;
+    private int nProducts;
+    private Product[] products;
+    private float totalPrice;
+
+    public Cart(int customerId, int nProducts) {
+        this.customerId = customerId;
+        this.nProducts = Math.abs(nProducts);
+        this.products = new Product[nProducts];
+        this.totalPrice = 0.0f;//To make the initial value °=0 
+    }
+//يتم اضافة products لل array عن طريق ال index
+  public void addProduct(Product product, int index) {
+        products[index] = product;
+        totalPrice += product.getPrice();
+    }
+//
+    public void removeProduct(int index) {
+        //بروح للمنتج عن طريق ال index و بطرح و بجيب سعر المنتج عن طريق getprice و بطرح ال productprice من totalprice
+        //بعد ما عملنا remove بنخلي ال index فاضي ب null
+    if (index >= 0 && index < products.length && products[index] != null) {
+        totalPrice -= products[index].getPrice();
+        products[index] = null;
+    } else {
+        System.out.println("Invalid index or product does not exist!");
+    }
+}
+//place order method
+public Order placeOrder(){
+    Order order=new Order(customerId,1,products,totalPrice);
+    order.printOrderInfo();
+    return order;
+}
+
+    public float calculatePrice() {
+        return totalPrice;
+    }
+
+    public Product[] getProducts() {
+        return products;
+    }
+}
+
+class Order {
+    private int customerId;
+    private int orderId;
+    private Product[] products;
+    private float totalPrice;
+
+    public Order(int customerId, int orderId, Product[] products, float totalPrice) {
+        this.customerId = customerId;
+        this.orderId = orderId;
+        this.products = products;
+        this.totalPrice = totalPrice;
+    }
+
+    public void printOrderInfo() {
+        System.out.println("Order Id: " + orderId);
+        System.out.println("Customer Id: " + customerId);
+        System.out.println("Products:");
+        //revise every element product من النوع products يشير الى جمبع عناصر products
+        for (Product product : products) {
+            if (product != null) {
+                System.out.println(product.getName() + " - $" + product.getPrice());
+            }
+        }
+        System.out.println("Total price: $" + totalPrice);
+    }
+}
+
+public class EcommerceSystem {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Customer input
+        System.out.println("Welcome to the E-commerce System!");
+        System.out.println("Please enter your id:");
+        int customerId = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.println("Please enter your name:");
+        String customerName = scanner.nextLine();
+        System.out.println("Please enter your address:");
+        String customerAddress = scanner.nextLine();
+//creatingg the objects to demonstrate the usage of the classes 
+
+        // Creating customer
+        Customer customer = new Customer(customerId, customerName, customerAddress);
+
+        // Creating products
+        ElectronicProduct smartPhone = new ElectronicProduct(1, "Smartphone", 599.99f, "Samsung", 1);
+        ClothingProduct tShirt = new ClothingProduct(2, "T-shirt", 19.99f, "large", "Cotton");
+        BookProduct oop = new BookProduct(3, "OOP", 39.99f, "O’Reilly", "X Publications");
+
+        // Creating shopping cart
+        System.out.println("How many products would you like to add to your cart?");
+        int nProducts = scanner.nextInt();
+        Cart cart = new Cart(customerId, nProducts);
+
+        // Adding products to cart
+        for (int i = 0; i < nProducts; i++) {
+            System.out.println("Which product would you like to add? 1-smartPhone 2-T_shirt 3-oop");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    cart.addProduct(smartPhone, i);
+                    break;
+                case 2:
+                    cart.addProduct(tShirt,i);
+                    break;
+                case 3:
+                    cart.addProduct(oop, i);
+                    break;
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+
+        // Calculate total price
+        float totalPrice = cart.calculatePrice();
+        System.out.println("Your total is $" + totalPrice + ". Would you like to place the order? 1-yes 2-No");
+
+        int orderChoice = scanner.nextInt();
+        //لقراءة اختيار المستخدم لو ١هيختار انه هيطلب الطلب و هيحطه في ال cart لو لا يضغط ٢
+        if (orderChoice == 1) {
+            // Place order
+            
+            System.out.println("Here's your order summary:");
+            cart.placeOrder();
+        } else {
+            System.out.println("Order not placed.");
+        }
+      }
+}
+
+
